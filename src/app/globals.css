@@ -1,26 +1,236 @@
 @import "tailwindcss";
 
+@theme {
+  /* ═══════════════════════════════════════════════════════════════════════
+     BRAND PALETTE · reskin the whole site by editing these 10 values.
+       noir / noir-deep / charcoal     → backgrounds (darkest → section)
+       ivory                           → primary text on dark
+       sand / sand-dim                 → secondary / muted text
+       gold / gold-bright / gold-deep  → accent (CTAs, highlights, wordmark)
+     ═══════════════════════════════════════════════════════════════════════ */
+  --color-noir: #0b0a08;
+  --color-noir-deep: #050504;
+  --color-charcoal: #16140f;
+  --color-charcoal-light: #221d15;
+  --color-ivory: #f5efe2;
+  --color-sand: #ad9f86;
+  --color-sand-dim: #756c5b;
+  --color-gold: #c9a356;
+  --color-gold-bright: #ecd6a3;
+  --color-gold-deep: #8a6a34;
+
+  /* ---- Type ---- */
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-inter);
+
+  /* ---- Easing ---- */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --header-h: 5.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  scrollbar-color: var(--color-gold-deep) transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background: var(--color-noir);
+}
+
+section[id] {
+  scroll-margin-top: var(--header-h);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-noir);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-noir);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-noir);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-deep);
+  border: 2px solid var(--color-noir);
+  border-radius: 999px;
+}
+
+/* ---- Reusable editorial primitives ---- */
+
+@utility container-edit {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  @variant sm {
+    padding-inline: 2.5rem;
+  }
+  @variant lg {
+    padding-inline: 4rem;
+  }
+}
+
+@utility section-pad {
+  padding-block: 6rem;
+  @variant lg {
+    padding-block: 9rem;
+  }
+}
+
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+@utility hairline {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-gold) 45%, transparent),
+    transparent
+  );
+}
+
+@utility noise-overlay {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 100%, rgba(5, 4, 3, 0.78) 0%, transparent 55%),
+    radial-gradient(120% 70% at 50% 0%, rgba(5, 4, 3, 0.6) 0%, transparent 50%);
+}
+
+/* Buttons */
+@utility btn-gold {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-gold);
+  padding: 0.95rem 2.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-ivory);
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transition: color 0.5s var(--ease-cinematic), border-color 0.5s var(--ease-cinematic);
+}
+
+@utility btn-gold-fill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-gold);
+  background: var(--color-gold);
+  padding: 0.95rem 2.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-noir);
+  cursor: pointer;
+  transition: background 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic), box-shadow 0.4s var(--ease-cinematic);
+  &:hover {
+    background: var(--color-gold-bright);
+    box-shadow: 0 12px 40px -12px color-mix(in srgb, var(--color-gold) 60%, transparent);
+  }
+}
+
+@utility link-underline {
+  position: relative;
+  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s var(--ease-cinematic);
+  padding-bottom: 0.2rem;
+  &:hover {
+    background-size: 100% 1px;
+  }
+}
+
+/* ---- Hero video: CSS-driven fade-in + slow ambient zoom (compositor, robust) ---- */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes heroZoom {
+  0%,
+  100% {
+    transform: scale(1.12);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+.hero-fade {
+  animation: heroFadeIn 1.6s var(--ease-cinematic) both;
+}
+.hero-zoom {
+  animation: heroZoom 34s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
