@@ -124,7 +124,10 @@ export function Hero() {
           {heroContent.eyebrow}
         </motion.p>
 
-        <h1 className="max-w-4xl font-display text-[clamp(2.75rem,7.5vw,6rem)] font-medium leading-[1.05] text-ivory">
+        <h1
+          className="max-w-4xl font-display font-medium leading-[1.05] text-ivory"
+          style={{ fontSize: "clamp(2.25rem, min(6.5vw, 9vh), 5.5rem)" }}
+        >
           {headline.map((line, i) => (
             <span key={line.text} className="block overflow-hidden pb-1">
               <motion.span
